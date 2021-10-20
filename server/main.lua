@@ -91,7 +91,7 @@ AddEventHandler('qb-storerobbery:server:SafeReward', function(safe)
     local luck = math.random(1, 100)
     local odd = math.random(1, 100)
     if luck <= 10 then
-        Player.Functions.AddItem("rolex", math.random(3, 7))
+        Player.Functions.AddItem("rolex", math.random(1, 3))
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["rolex"], "add")
         if luck == odd then
             Citizen.Wait(500)
@@ -116,6 +116,7 @@ AddEventHandler('qb-storerobbery:server:callCops', function(type, safe, streetLa
     }
     TriggerClientEvent("qb-storerobbery:client:robberyCall", -1, type, safe, streetLabel, coords)
     TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
+    TriggerServerEvent('police:server:policeAlert', 'Robbery In Progress')
 end)
 
 Citizen.CreateThread(function()

@@ -1,7 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local SafeCodes = {}
 local cashA = 100 				--<<how much minimum you can get from a robbery
-local cashB = 1250				--<< how much maximum you can get from a robbery
+local cashB = 750				--<< how much maximum you can get from a robbery
 
 CreateThread(function()
     while true do

@@ -127,6 +127,15 @@ RegisterNetEvent('police:SetCopCount', function(amount)
     CurrentCops = amount
 end)
 
+RegisterNetEvent('qb-storerobbery:PlayOnOneTest')
+AddEventHandler('qb-storerobbery:PlayOnOneTest', function(soundFile, soundVolume)
+    SendNUIMessage({
+        transactionType     = 'playSound',
+        transactionFile     = soundFile,
+        transactionVolume   = soundVolume
+    })
+end)
+
 RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     usingAdvanced = isAdvanced
     for k, v in pairs(Config.Registers) do
@@ -439,7 +448,7 @@ RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, stree
             cameraId = Config.Registers[key].camId
         end
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        TriggerEvent('InteractSound_SV:PlayOnOne', "security-alarm")
+        TriggerServerEvent("qb-storerobbery:PlayOnSourceTest", "security-alert", 0.9)
         TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
             timeOut = 5000,
             alertTitle = "10-31 | Shop Robbery",

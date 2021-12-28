@@ -30,6 +30,11 @@ CreateThread(function()
     end
 end)
 
+RegisterServerEvent('qb-storerobbery:PlayOnSourceTest')
+AddEventHandler('qb-storerobbery:PlayOnSourceTest', function(soundFile, soundVolume)
+    TriggerClientEvent('qb-storerobbery:PlayOnOneTest', source, soundFile, soundVolume)
+end)
+
 RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
     local src = source
 	local Player = QBCore.Functions.GetPlayer(src)

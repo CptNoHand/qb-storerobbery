@@ -439,6 +439,7 @@ RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, stree
             cameraId = Config.Registers[key].camId
         end
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
+        TriggerEvent('InteractSound_SV:PlayOnOne', "security-alarm")
         TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
             timeOut = 5000,
             alertTitle = "10-31 | Shop Robbery",

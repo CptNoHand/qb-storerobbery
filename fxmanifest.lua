@@ -14,8 +14,7 @@ files {
     'html/index.html',
     'html/script.js',
     'html/style.css',
-    'html/reset.css',
-    'html/sounds/*.ogg'
+    'html/reset.css'
 }
 
 lua54 'yes'

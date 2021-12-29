@@ -438,7 +438,7 @@ RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, stree
         else
             cameraId = Config.Registers[key].camId
         end
-        PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
+        PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1.5)
         TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
             timeOut = 5000,
             alertTitle = "10-31 | Shop Robbery",

@@ -1,6 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-local uiOpen = false
-local currentRegister   = 0
+local currentRegister = 0
 local currentSafe = 0
 local copsCalled = false
 local CurrentCops = 0
@@ -32,7 +31,7 @@ CreateThread(function()
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
         local inRange = false
-        for k, v in pairs(Config.Registers) do
+        for k in pairs(Config.Registers) do
             local dist = #(pos - Config.Registers[k][1].xyz)
             if dist <= 1 and Config.Registers[k].robbed then
                 inRange = true
@@ -80,8 +79,8 @@ CreateThread(function()
                                     end
 
                                     if not copsCalled then
-                                        local pos = GetEntityCoords(PlayerPedId())
-					local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                                        pos = GetEntityCoords(PlayerPedId())
+                                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                                         local street1 = GetStreetNameFromHashKey(s1)
                                         local street2 = GetStreetNameFromHashKey(s2)
                                         local streetLabel = street1
@@ -129,13 +128,12 @@ end)
 
 RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     usingAdvanced = isAdvanced
-    for k, v in pairs(Config.Registers) do
+    for k in pairs(Config.Registers) do
         local ped = PlayerPedId()
         local pos = GetEntityCoords(ped)
         local dist = #(pos - Config.Registers[k][1].xyz)
         if dist <= 1 and not Config.Registers[k].robbed then
             if CurrentCops >= Config.MinimumStoreRobberyPolice then
-                -- print(usingAdvanced)
                 if usingAdvanced then
                     lockpick(true)
                     currentRegister = k
@@ -143,7 +141,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -154,14 +152,13 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         copsCalled = true
                     end
                 else
-
                     lockpick(true)
                     currentRegister = k
                     if not IsWearingHandshoes() then
                         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
                     end
                     if not copsCalled then
-			local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
+                        local s1, s2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
                         local street1 = GetStreetNameFromHashKey(s1)
                         local street2 = GetStreetNameFromHashKey(s2)
                         local streetLabel = street1
@@ -200,7 +197,7 @@ end
 
 function setupRegister()
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:getRegisterStatus', function(Registers)
-        for k, v in pairs(Registers) do
+        for k in pairs(Registers) do
             Config.Registers[k].robbed = Registers[k].robbed
         end
     end)
@@ -208,7 +205,7 @@ end
 
 function setupSafes()
     QBCore.Functions.TriggerCallback('qb-storerobbery:server:getSafeStatus', function(Safes)
-        for k, v in pairs(Safes) do
+        for k in pairs(Safes) do
             Config.Safes[k].robbed = Safes[k].robbed
         end
     end)
@@ -236,7 +233,6 @@ function lockpick(bool)
         toggle = bool,
     })
     SetCursorLocation(0.5, 0.2)
-    uiOpen = bool
 end
 
 function loadAnimDict(dict)
@@ -259,7 +255,7 @@ end
 
 local openingDoor = false
 
-RegisterNUICallback('success', function()
+RegisterNUICallback('success', function(_, cb)
     if currentRegister ~= 0 then
         lockpick(false)
         TriggerServerEvent('qb-storerobbery:server:setRegisterStatus', currentRegister)
@@ -278,7 +274,6 @@ RegisterNUICallback('success', function()
             openingDoor = false
             ClearPedTasks(PlayerPedId())
             TriggerServerEvent('qb-storerobbery:server:takeMoney', currentRegister, true)
-            currentRegister = 0
         end, function() -- Cancel
             openingDoor = false
             ClearPedTasks(PlayerPedId())
@@ -296,6 +291,7 @@ RegisterNUICallback('success', function()
             action = "kekw",
         })
     end
+    cb('ok')
 end)
 
 function LockpickDoorAnim(time)
@@ -314,11 +310,13 @@ function LockpickDoorAnim(time)
                 StopAnimTask(PlayerPedId(), "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 1.0)
             end
         end
+        currentRegister = 0
     end)
 end
 
-RegisterNUICallback('callcops', function()
+RegisterNUICallback('callcops', function(_, cb)
     TriggerEvent("police:SetCopAlert")
+    cb('ok')
 end)
 
 RegisterNetEvent('SafeCracker:EndMinigame', function(won)
@@ -342,7 +340,7 @@ RegisterNetEvent('SafeCracker:EndMinigame', function(won)
     copsCalled = false
 end)
 
-RegisterNUICallback('PadLockSuccess', function()
+RegisterNUICallback('PadLockSuccess', function(_, cb)
     if currentSafe ~= 0 then
         if not Config.Safes[currentSafe].robbed then
             SendNUIMessage({
@@ -354,18 +352,21 @@ RegisterNUICallback('PadLockSuccess', function()
             action = "kekw",
         })
     end
+    cb('ok')
 end)
 
-RegisterNUICallback('PadLockClose', function()
+RegisterNUICallback('PadLockClose', function(_, cb)
     SetNuiFocus(false, false)
     copsCalled = false
+    cb('ok')
 end)
 
-RegisterNUICallback("CombinationFail", function(data, cb)
+RegisterNUICallback("CombinationFail", function(_, cb)
     PlaySound(-1, "Place_Prop_Fail", "DLC_Dmod_Prop_Editor_Sounds", 0, 0, 1)
+    cb("ok")
 end)
 
-RegisterNUICallback('fail', function()
+RegisterNUICallback('fail', function(_ ,cb)
     if usingAdvanced then
         if math.random(1, 100) < 20 then
             TriggerServerEvent("QBCore:Server:RemoveItem", "advancedlockpick", 1)
@@ -383,10 +384,12 @@ RegisterNUICallback('fail', function()
         QBCore.Functions.Notify("You Broke The Lock Pick")
     end
     lockpick(false)
+    cb('ok')
 end)
 
-RegisterNUICallback('exit', function()
+RegisterNUICallback('exit', function(_, cb)
     lockpick(false)
+    cb('ok')
 end)
 
 RegisterNUICallback('TryCombination', function(data, cb)
@@ -412,6 +415,7 @@ RegisterNUICallback('TryCombination', function(data, cb)
                 currentSafe = 0
             end
         end
+        cb("ok")
     end, currentSafe)
 end)
 
@@ -420,7 +424,7 @@ RegisterNetEvent('qb-storerobbery:client:setRegisterStatus', function(batch, val
     if(type(batch) ~= "table") then
         Config.Registers[batch] = val
     else
-        for k, v in pairs(batch) do
+        for k in pairs(batch) do
             Config.Registers[k] = batch[k]
         end
     end
@@ -430,35 +434,10 @@ RegisterNetEvent('qb-storerobbery:client:setSafeStatus', function(safe, bool)
     Config.Safes[safe].robbed = bool
 end)
 
-RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, streetLabel, coords)
+RegisterNetEvent('qb-storerobbery:client:robberyCall', function(_, _, _, coords)
     if PlayerJob.name == "police" and onDuty then
-        local cameraId = 4
-        if type == "safe" then
-            cameraId = Config.Safes[key].camId
-        else
-            cameraId = Config.Registers[key].camId
-        end
-        PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1.5)
-        TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
-            timeOut = 5000,
-            alertTitle = "10-31 | Shop Robbery",
-            coords = {
-                x = coords.x,
-                y = coords.y,
-                z = coords.z,
-            },
-            details = {
-                [1] = {
-                    icon = '<i class="fas fa-video"></i>',
-                    detail = cameraId,
-                },
-                [2] = {
-                    icon = '<i class="fas fa-globe-europe"></i>',
-                    detail = streetLabel,
-                },
-            },
-            callSign = QBCore.Functions.GetPlayerData().metadata["callsign"],
-        })
+        PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
+        TriggerServerEvent('police:server:policeAlert', 'Storerobbery in progress')
 
         local transG = 250
         local blip = AddBlipForCoord(coords.x, coords.y, coords.z)

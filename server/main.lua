@@ -1,7 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local SafeCodes = {}
-local cashA = 100 				--<<how much minimum you can get from a robbery
-local cashB = 750				--<< how much maximum you can get from a robbery
+local cashA = 500 				--<<how much minimum you can get from a robbery
+local cashB = 2500				--<< how much maximum you can get from a robbery
 
 CreateThread(function()
     while true do
@@ -112,7 +112,6 @@ RegisterNetEvent('qb-storerobbery:server:callCops', function(type, safe, streetL
     }
     TriggerClientEvent("qb-storerobbery:client:robberyCall", -1, type, safe, streetLabel, coords)
     TriggerClientEvent("qb-phone:client:addPoliceAlert", -1, alertData)
-    TriggerServerEvent('police:server:policeAlert', 'Robbery In Progress')
 end)
 
 CreateThread(function()

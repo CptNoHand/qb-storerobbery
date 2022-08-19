@@ -170,6 +170,24 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         end
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
+                        local data = exports['cd_dispatch']:GetPlayerInfo()
+                            TriggerServerEvent('cd_dispatch:AddNotification', {
+                            job_table = {'police'}, 
+                            coords = data.coords,
+                            title = '10-65 - Store Robbery',
+                            message = 'A '..data.sex..' robbing a store at '..data.street, 
+                            flash = 0,
+                            unique_id = tostring(math.random(0000000,9999999)),
+                            blip = {
+                                sprite = 431, 
+                                scale = 1.2, 
+                                colour = 3,
+                                flashes = false, 
+                                text = '911 - Store Robbery',
+                                time = (5*60*1000),
+                                sound = 1,
+                            }
+                        })
                     end
 
                 end
@@ -404,6 +422,23 @@ RegisterNUICallback('TryCombination', function(data, cb)
                 takeAnim()
             else
                 TriggerEvent("police:SetCopAlert")
+                TriggerServerEvent('cd_dispatch:AddNotification', {
+                    job_table = {'police'}, 
+                    coords = data.coords,
+                    title = '10-15 - Store Robbery',
+                    message = 'A '..data.sex..' robbing a store at '..data.street, 
+                    flash = 0,
+                    unique_id = tostring(math.random(0000000,9999999)),
+                    blip = {
+                        sprite = 431, 
+                        scale = 1.2, 
+                        colour = 3,
+                        flashes = false, 
+                        text = '911 - Store Robbery',
+                        time = (5*60*1000),
+                        sound = 1,
+                    }
+                })
                 SetNuiFocus(false, false)
                 SendNUIMessage({
                     action = "closeKeypad",
@@ -439,6 +474,24 @@ RegisterNetEvent('qb-storerobbery:client:robberyCall', function(type, key, stree
             cameraId = Config.Registers[key].camId
         end
         PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1.5)
+        local data = exports['cd_dispatch']:GetPlayerInfo()
+        TriggerServerEvent('cd_dispatch:AddNotification', {
+            job_table = {'police'}, 
+            coords = data.coords,
+            title = '10-15 - Store Robbery',
+            message = 'A '..data.sex..' robbing a store at '..data.street, 
+            flash = 0,
+            unique_id = tostring(math.random(0000000,9999999)),
+            blip = {
+                sprite = 431, 
+                scale = 1.2, 
+                colour = 3,
+                flashes = false, 
+                text = '911 - Store Robbery',
+                time = (5*60*1000),
+                sound = 1,
+            }
+        })
         TriggerEvent('qb-policealerts:client:AddPoliceAlert', {
             timeOut = 5000,
             alertTitle = "10-31 | Shop Robbery",

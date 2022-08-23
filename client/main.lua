@@ -150,6 +150,24 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         end
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
+                        local data = exports['cd_dispatch']:GetPlayerInfo()
+                        TriggerServerEvent('cd_dispatch:AddNotification', {
+                            job_table = {'police'}, 
+                            coords = data.coords,
+                            title = '10-15 - Store Robbery',
+                            message = 'A '..data.sex..' robbing a store at '..data.street, 
+                            flash = 0,
+                            unique_id = tostring(math.random(0000000,9999999)),
+                            blip = {
+                                sprite = 431, 
+                                scale = 1.2, 
+                                colour = 3,
+                                flashes = false, 
+                                text = '911 - Store Robbery',
+                                time = (5*60*1000),
+                                sound = 1,
+                            }
+                        })
                     end
                 else
                     lockpick(true)
@@ -168,10 +186,10 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent("qb-storerobbery:server:callCops", "cashier", currentRegister, streetLabel, pos)
                         copsCalled = true
                         local data = exports['cd_dispatch']:GetPlayerInfo()
-                            TriggerServerEvent('cd_dispatch:AddNotification', {
+                        TriggerServerEvent('cd_dispatch:AddNotification', {
                             job_table = {'police'}, 
                             coords = data.coords,
-                            title = '10-65 - Store Robbery',
+                            title = '10-15 - Store Robbery',
                             message = 'A '..data.sex..' robbing a store at '..data.street, 
                             flash = 0,
                             unique_id = tostring(math.random(0000000,9999999)),
@@ -455,23 +473,5 @@ end)
 RegisterNetEvent('qb-storerobbery:client:robberyCall', function(_, _, _, coords)
     if PlayerJob.name == "police" and onDuty then
         PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-        local data = exports['cd_dispatch']:GetPlayerInfo()
-        TriggerServerEvent('cd_dispatch:AddNotification', {
-            job_table = {'police'}, 
-            coords = data.coords,
-            title = '10-15 - Store Robbery',
-            message = 'A '..data.sex..' robbing a store at '..data.street, 
-            flash = 0,
-            unique_id = tostring(math.random(0000000,9999999)),
-            blip = {
-                sprite = 431, 
-                scale = 1.2, 
-                colour = 3,
-                flashes = false, 
-                text = '911 - Store Robbery',
-                time = (5*60*1000),
-                sound = 1,
-            }
-        })
     end
 end)

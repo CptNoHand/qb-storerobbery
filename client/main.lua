@@ -154,7 +154,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent('cd_dispatch:AddNotification', {
                             job_table = {'police'}, 
                             coords = data.coords,
-                            title = '10-15 - Store Robbery',
+                            title = '10-91 - Ladenraub',
                             message = 'A '..data.sex..' robbing a store at '..data.street, 
                             flash = 0,
                             unique_id = tostring(math.random(0000000,9999999)),
@@ -163,7 +163,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                                 scale = 1.2, 
                                 colour = 3,
                                 flashes = false, 
-                                text = '911 - Store Robbery',
+                                text = '911 - Ladenraub',
                                 time = (5*60*1000),
                                 sound = 1,
                             }
@@ -189,7 +189,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                         TriggerServerEvent('cd_dispatch:AddNotification', {
                             job_table = {'police'}, 
                             coords = data.coords,
-                            title = '10-15 - Store Robbery',
+                            title = '10-91 - Ladenraub',
                             message = 'A '..data.sex..' robbing a store at '..data.street, 
                             flash = 0,
                             unique_id = tostring(math.random(0000000,9999999)),
@@ -198,7 +198,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                                 scale = 1.2, 
                                 colour = 3,
                                 flashes = false, 
-                                text = '911 - Store Robbery',
+                                text = '911 - Ladenraub',
                                 time = (5*60*1000),
                                 sound = 1,
                             }

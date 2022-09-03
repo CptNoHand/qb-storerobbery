@@ -89,6 +89,24 @@ CreateThread(function()
                                         end
                                         TriggerServerEvent("qb-storerobbery:server:callCops", "safe", currentSafe, streetLabel, pos)
                                         copsCalled = true
+                                        local data = exports['cd_dispatch']:GetPlayerInfo()
+                                        TriggerServerEvent('cd_dispatch:AddNotification', {
+                                            job_table = {'police'}, 
+                                            coords = data.coords,
+                                            title = '10-91 - Ladenraub',
+                                            message = 'A '..data.sex..' robbing a store at '..data.street, 
+                                            flash = 0,
+                                            unique_id = tostring(math.random(0000000,9999999)),
+                                            blip = {
+                                                sprite = 431, 
+                                                scale = 1.2, 
+                                                colour = 3,
+                                                flashes = false, 
+                                                text = '911 - Ladenraub',
+                                                time = (5*60*1000),
+                                                sound = 1,
+                                            }
+                                        })
                                     end
                                 else
                                     QBCore.Functions.Notify("Not Enough Police (".. Config.MinimumStoreRobberyPolice .." Required)", "error")

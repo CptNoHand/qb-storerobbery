@@ -40,6 +40,8 @@ Config.Registers = {
     [30] = {vector3(-161.07, 6321.23, 31.5), robbed = false, time = 0, safeKey = 18, camId = 27},
     [31] = {vector3(160.52, 6641.74, 31.6), robbed = false, time = 0, safeKey = 19, camId = 28},
     [32] = {vector3(162.16, 6643.22, 31.6), robbed = false, time = 0, safeKey = 19, camId = 29},
+    [33] = {vector3(812.87, -783.21, 26.17), robbed = false, time = 0, safeKey = 20, camId = 31},
+    [34] = {vector3(812.74, -781.14, 26.17), robbed = false, time = 0, safeKey = 20, camId = 31},
 }
 
 Config.Safes = {
@@ -62,6 +64,7 @@ Config.Safes = {
     [17] = {vector3(1734.78, 6420.84, 35.03), type = "keypad", robbed = false, camId = 20},
     [18] = {vector3(-168.40, 6318.80, 30.58), type = "padlock", robbed = false, camId = 27},
     [19] = {vector3(168.95, 6644.74, 31.70), type = "keypad", robbed = false, camId = 30},
+    [20] = {vector3(819.18, -774.57, 26.18), type = "padlock", robbed = false, camId = 31},
 }
 
 Config.MaleNoHandshoes = {

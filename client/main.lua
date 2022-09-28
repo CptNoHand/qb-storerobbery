@@ -35,7 +35,7 @@ CreateThread(function()
             local dist = #(pos - Config.Registers[k][1].xyz)
             if dist <= 1 and Config.Registers[k].robbed then
                 inRange = true
-                DrawText3Ds(Config.Registers[k][1].xyz, 'The Cash Register Is Empty')
+                DrawText3Ds(Config.Registers[k][1].xyz, Lang:t("text.the_cash_register_is_empty"))
             end
         end
         if not inRange then
@@ -57,7 +57,7 @@ CreateThread(function()
                     inRange = true
                     if dist < 1.0 then
                         if not Config.Safes[safe].robbed then
-                            DrawText3Ds(Config.Safes[safe][1].xyz, '~g~E~w~ - Try Combination')
+                            DrawText3Ds(Config.Safes[safe][1].xyz, Lang:t("text.try_combination"))
                             if IsControlJustPressed(0, 38) then
                                 if CurrentCops >= Config.MinimumStoreRobberyPolice then
                                     currentSafe = safe
@@ -109,11 +109,11 @@ CreateThread(function()
                                         })
                                     end
                                 else
-                                    QBCore.Functions.Notify("Not Enough Police (".. Config.MinimumStoreRobberyPolice .." Required)", "error")
+                                    QBCore.Functions.Notify(Lang:t("error.minimum_store_robbery_police", { MinimumStoreRobberyPolice = Config.MinimumStoreRobberyPolice}), "error")
                                 end
                             end
                         else
-                            DrawText3Ds(Config.Safes[safe][1].xyz, 'Safe Opened')
+                            DrawText3Ds(Config.Safes[safe][1].xyz, Lang:t("text.safe_opened"))
                         end
                     end
                 end
@@ -226,7 +226,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
                 end
 
             else
-                QBCore.Functions.Notify("Not Enough Police (1 Required)", "error")
+                QBCore.Functions.Notify(Lang:t("error.minimum_store_robbery_police", { MinimumStoreRobberyPolice = Config.MinimumStoreRobberyPolice}), "error")
             end
         end
     end
@@ -315,7 +315,7 @@ RegisterNUICallback('success', function(_, cb)
         TriggerServerEvent('qb-storerobbery:server:setRegisterStatus', currentRegister)
         local lockpickTime = 25000
         LockpickDoorAnim(lockpickTime)
-        QBCore.Functions.Progressbar("search_register", "Emptying The Register..", lockpickTime, false, true, {
+        QBCore.Functions.Progressbar("search_register", Lang:t("text.emptying_the_register"), lockpickTime, false, true, {
             disableMovement = true,
             disableCarMovement = true,
             disableMouse = false,
@@ -331,7 +331,7 @@ RegisterNUICallback('success', function(_, cb)
         end, function() -- Cancel
             openingDoor = false
             ClearPedTasks(PlayerPedId())
-            QBCore.Functions.Notify("Process canceled..", "error")
+            QBCore.Functions.Notify(Lang:t("error.process_canceled"), "error")
             currentRegister = 0
         end)
         CreateThread(function()
@@ -435,7 +435,7 @@ RegisterNUICallback('fail', function(_ ,cb)
     if (IsWearingHandshoes() and math.random(1, 100) <= 25) then
         local pos = GetEntityCoords(PlayerPedId())
         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-        QBCore.Functions.Notify("You Broke The Lock Pick")
+        QBCore.Functions.Notify(Lang:t("error.you_broke_the_lock_pick"))
     end
     lockpick(false)
     cb('ok')

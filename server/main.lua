@@ -1,7 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local SafeCodes = {}
-local cashA = 500 				--<<how much minimum you can get from a robbery
-local cashB = 2500				--<< how much maximum you can get from a robbery
+local cashA = 1500 				--<<how much minimum you can get from a robbery
+local cashB = 3500				--<< how much maximum you can get from a robbery
 
 CreateThread(function()
     while true do
@@ -37,14 +37,16 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
 
     local playerPed = GetPlayerPed(src)
     local playerCoords = GetEntityCoords(playerPed)
-    if #(playerCoords - Config.Registers[register][1].xyz) > 3.0 or (not Config.Registers[register].robbed and not isDone) or (Config.Registers[register].time <= 0 and not isDone) then
+    local registerCoords = Config.Registers[register][1].xyz
+    if #(playerCoords - registerCoords) > 1.0 or (not Config.Registers[register].robbed and not isDone) or (Config.Registers[register].time <= 0 and not isDone) then
         return DropPlayer(src, "Attempted exploit abuse")
     end
 
-    -- Add any additional code you want above this comment to do whilst robbing a register, everything above the if statement under this will be triggered every 2 seconds when a register is getting robbed.
+    -- Additional code goes here...
 
     if isDone then
         local bags = math.random(1,3)
+        local cashA, cashB = 500, 2500 -- Adjust the values to fit the game's economy
         local info = {
             worth = math.random(cashA, cashB)
         }
@@ -52,13 +54,17 @@ RegisterNetEvent('qb-storerobbery:server:takeMoney', function(register, isDone)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
         if math.random(1, 100) <= 10 then
             local code = SafeCodes[Config.Registers[register].safeKey]
-            if Config.Safes[Config.Registers[register].safeKey].type == "keypad" then
+            local safeType = Config.Safes[Config.Registers[register].safeKey].type
+            if safeType == "keypad" then
                 info = {
                     label = Lang:t("text.safe_code")..tostring(code)
                 }
             else
+                local function toCode(num)
+                    return tostring(math.floor((num % 360) / 3.60))
+                end
                 info = {
-                    label = Lang:t("text.safe_code")..tostring(math.floor((code[1] % 360) / 3.60)).."-"..tostring(math.floor((code[2] % 360) / 3.60)).."-"..tostring(math.floor((code[3] % 360) / 3.60)).."-"..tostring(math.floor((code[4] % 360) / 3.60)).."-"..tostring(math.floor((code[5] % 360) / 3.60))
+                    label = Lang:t("text.safe_code")..toCode(code[1]).."-"..toCode(code[2]).."-"..toCode(code[3]).."-"..toCode(code[4]).."-"..toCode(code[5])
                 }
             end
             Player.Functions.AddItem("stickynote", 1, false, info)

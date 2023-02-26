@@ -94,7 +94,7 @@ CreateThread(function()
                                             job_table = {'police'}, 
                                             coords = data.coords,
                                             title = '10-91 - Ladenraub',
-                                            message = 'A '..data.sex..' robbing a store at '..data.street, 
+                                            message = 'Person '..data.sex..' raubt einen Laden aus bei '..data.street, 
                                             flash = 0,
                                             unique_id = tostring(math.random(0000000,9999999)),
                                             blip = {
